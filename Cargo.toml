@@ -1,0 +1,6 @@
+[workspace]
+members = [
+    "app", "libs/genetic-algorithm",
+    "libs/neural-network"
+, "libs/simulation", "libs/simulation-wasm"]
+resolver = "2"
