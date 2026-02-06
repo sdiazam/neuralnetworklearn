@@ -1,6 +1,5 @@
 use std::ops::Index;
-use rand::seq::IndexedRandom;
-use rand::{Rng, RngCore};
+use rand::{seq::SliceRandom, Rng, RngCore};
 // a trait means any type that implements this trait, must provide certain methods
 // how to select what parents will pass their genes on
 pub trait SelectionMethod { // any individual is able to use select because it is a trait of type I 
@@ -50,7 +49,7 @@ impl CrossoverMethod for UniformCrossover{
         parent_a
             .iter()// iterate, zip with b iterator, map and in closing: choose one to collect
             .zip(parent_b.iter())
-            .map(|(&a, &b)| if rng.random_bool(0.5) { a } else { b })
+            .map(|(&a, &b)| if rng.gen_bool(0.5) { a } else { b })
             .collect() // collect all into a vector
     }
 }
@@ -83,11 +82,11 @@ impl MutationMethod for GaussianMutation {
         // for all genes in child
         for gene in child.iter_mut(){
             // determine a sign for the mutation
-            let sign = if rng.random_bool(0.5) {-1.0} else {1.0};
+            let sign = if rng.gen_bool(0.5) {-1.0} else {1.0};
 
             // (chance of being true) if true multiply by magnitude * a sign, and multiply by a random decimal
-            if rng.random_bool(self.chance as f64) {
-                *gene += sign * self.coeff * rng.random::<f32>();
+            if rng.gen_bool(self.chance as f64) {
+                *gene += sign * self.coeff * rng.gen::<f32>();
             }
         }
     }
